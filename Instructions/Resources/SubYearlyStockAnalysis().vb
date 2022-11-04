@@ -127,7 +127,7 @@ Dim ws As Worksheet, rowCount As Long, firstCapture As Long, count As Long, erro
         Columns(10).NumberFormat = "0.00"
         Columns(11).NumberFormat = "0.00%"
         Range(Cells(2, 17), Cells(3, 17)).NumberFormat = "0.00%"
-        Cells(4, 17).NumberFormat = "0.0000E+00"
+        Cells(4, 17).NumberFormat = "0.00E+00"
         
         Columns("H:H").ColumnWidth = 20
         Columns("I:I").ColumnWidth = 10
@@ -147,6 +147,8 @@ Dim ws As Worksheet, rowCount As Long, firstCapture As Long, count As Long, erro
     
 
 End Sub
+
+
 
 
 
