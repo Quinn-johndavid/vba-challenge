@@ -1,8 +1,5 @@
 Sub YearlyStockAnalysis()
 
-
-'Variable declare
-
 Dim ws As Worksheet, rowCount As Long, firstCapture As Long, count As Long, errorCount As Long, lastRow As Long, yearValChange As Double, percentageChange As Double, stockVolTotal As Double, tickerNameArray(), tickerValArray()
 
 'worksheet iteration
@@ -14,7 +11,6 @@ Dim ws As Worksheet, rowCount As Long, firstCapture As Long, count As Long, erro
         'Sorting arguements, using built in functions because i thought they were neat and easier to use!!!
         Range("A2").End(xlDown).End(xlToRight).Sort [A2], xlAscending, Header:=xlYes
         
-        'setting Last Row
         lastRow = Cells(Rows.count, 1).End(xlUp).Row
         
         'Summary labels location and names
@@ -29,13 +25,12 @@ Dim ws As Worksheet, rowCount As Long, firstCapture As Long, count As Long, erro
         errorCount = 0
         stockVolTot = 0
         
-        'Start with Row2, when the loop finds a new ticker that isnt in its array, firstCapture adds it
+        'Start with Row2, when the loop finds a new ticker that isnt in the array, firstCapture adds it
         firstCapture = 2
         For rowCount = 2 To lastRow
             
             If Cells(rowCount, 1).Value <> Cells(rowCount + 1, 1).Value Then
             
-               'Check if there is a change in value of Ticker'
                 count = count + 1
         
                 'Calc yearly changes
@@ -45,7 +40,7 @@ Dim ws As Worksheet, rowCount As Long, firstCapture As Long, count As Long, erro
                 If Cells(firstCapture, 3).Value = 0 Then
                     percentageChange = 0
                     If errorCount = 0 Then
-                        'Labels are added on first Error if error
+                        'yellow fill is added on first Error if error, from what i can tell this is a clean dataset but i dunno im too lazy to go through all those lines
                         Cells(6, 16).Value = "Tickers with Errors(divide by 0 err)"
                         Cells(6, 16).Interior.ColorIndex = 6
                     End If
@@ -53,7 +48,9 @@ Dim ws As Worksheet, rowCount As Long, firstCapture As Long, count As Long, erro
                     Cells(7 + errorCount, 16).Interior.ColorIndex = 6
                     errorCount = errorCount + 1
                 Else
+
                     percentageChange = yearValChange / Cells(firstCapture, 3).Value
+
                 End If
         
                 'Calculate stockVolTot
@@ -76,9 +73,9 @@ Dim ws As Worksheet, rowCount As Long, firstCapture As Long, count As Long, erro
                 If count = 1 Then
                 'Initialize the arrays
                 'then pull the data that meets the if statements arguments, goes in order of the list below
-                'Greatest % increase tracking
-                'Greatest % decrease tracking
-                'Greatest stock volume tracking
+                'Greatest % increase tracking (part of bonus)
+                'Greatest % decrease tracking (part of bonus)
+                'Greatest stock volume tracking (part of bonus)
 
                     tickerNameArray = Array(Cells(rowCount, 1), Cells(rowCount, 1), Cells(rowCount, 1))
                     tickerValueArray = Array(percentageChange, percentageChange, stockVolTot)
@@ -106,16 +103,12 @@ Dim ws As Worksheet, rowCount As Long, firstCapture As Long, count As Long, erro
                 stockVolTot = 0
                 
             Else
-                'update the stockVolTot
                 stockVolTot = stockVolTot + Cells(rowCount, 7).Value
             End If
-            
         Next rowCount
+         
+        'Label Filling then filling and formatting in the results
         
-        
-        
-        'Label Filling then filling in the
-        'Results
         Cells(1, 16).Value = "Ticker"
         Cells(1, 17).Value = "Value"
         Cells(2, 15).Value = "Greatest % Increase"
@@ -131,42 +124,31 @@ Dim ws As Worksheet, rowCount As Long, firstCapture As Long, count As Long, erro
         Cells(3, 17).Value = tickerValueArray(1)
         Cells(4, 17).Value = tickerValueArray(2)
         
-        
-        'Number and  Column width formatting, would use a method to call this but dont know how to do that in vba, 
-        'also would like to know how to clean worksheets with executed macros so i dont have to go without saving my changes to see if my code works
         Columns(10).NumberFormat = "0.00"
         Columns(11).NumberFormat = "0.00%"
         Range(Cells(2, 17), Cells(3, 17)).NumberFormat = "0.00%"
         Cells(4, 17).NumberFormat = "0.0000E+00"
         
-        Columns("H:H").ColumnWidth = 44
-        Columns("I:I").ColumnWidth = 14
-        Columns("J:J").ColumnWidth = 14
-        Columns("K:K").ColumnWidth = 14
-        Columns("L:L").ColumnWidth = 20
-        Columns("M:M").ColumnWidth = 22
-        Columns("N:N").ColumnWidth = 22
+        Columns("H:H").ColumnWidth = 20
+        Columns("I:I").ColumnWidth = 10
+        Columns("J:J").ColumnWidth = 10
+        Columns("K:K").ColumnWidth = 10
+        Columns("L:L").ColumnWidth = 17
+        Columns("M:M").ColumnWidth = 15
+        Columns("N:N").ColumnWidth = 15
         Columns("O:O").ColumnWidth = 26
         Columns("P:P").ColumnWidth = 14
         Columns("Q:Q").ColumnWidth = 20
         Range("I1:Q1").Select
-        With Selection
-            .HorizontalAlignment = xlLeft
-            .VerticalAlignment = xlCenter
-            .WrapText = False
-            .Orientation = 0
-            .AddIndent = False
-            .IndentLevel = 0
-            .ShrinkToFit = False
-            .ReadingOrder = xlContext
-            .MergeCells = False
-        End With
+        
         
     Next
 
     
 
 End Sub
+
+
 
 
 
